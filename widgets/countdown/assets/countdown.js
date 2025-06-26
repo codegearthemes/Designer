@@ -48,76 +48,118 @@
         
                     return options;
                 },
-                initCountdown: function ( $countdownElement, options ) {
-                    var countDownDate = new Date( options.date ).getTime();
-        
-                    // Update the count down every 1 second
-                    var x = setInterval(
-                        function () {
-        
-                            // Get today's date and time
-                            var now = new Date().getTime();
-        
-                            // Find the distance between now and the count down date
-                            var distance = countDownDate - now;
+               initCountdown: function ( $countdownElement, options ) {
+				   var countDownDate = new Date( options.date ).getTime();
 
-        
-                            // Time calculations for days, hours, minutes and seconds
-                            var months  = Math.floor( distance / (1000 * 60 * 60 * 24 * 30) );
-                            var days    = Math.floor( (distance % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24) );
-                            var hours   = Math.floor( (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60) );
-                            var minutes = Math.floor( (distance % (1000 * 60 * 60)) / (1000 * 60) );
-                            var seconds = Math.floor( (distance % (1000 * 60)) / 1000 );
-        
-                            if ( 'hide-months' === options.hide ) {
-                                days = Math.floor( distance / (1000 * 60 * 60 * 24) );
-                            }
+				   // Update the count down every 1 second
+				   var x = setInterval(
+					   function () {
 
-                            var $monthsHolder  = $countdownElement.find( '.digit-months' );
-                            var $daysHolder    = $countdownElement.find( '.digit-days' );
-                            var $hoursHolder   = $countdownElement.find( '.digit-hours' );
-                            var $minutesHolder = $countdownElement.find( '.digit-minutes' );
-                            var $secondsHolder = $countdownElement.find( '.digit-seconds' );
-        
-                            $monthsHolder.find( '.designer-label' ).html( ( 1 === months ) ? options.monthLabel : options.monthLabelPlural );
-                            $daysHolder.find( '.designer-label' ).html( ( 1 === days ) ? options.dayLabel : options.dayLabelPlural );
-                            $hoursHolder.find( '.designer-label' ).html( ( 1 === hours ) ? options.hourLabel : options.hourLabelPlural );
-                            $minutesHolder.find( '.designer-label' ).html( ( 1 === minutes ) ? options.minuteLabel : options.minuteLabelPlural );
-                            $secondsHolder.find( '.designer-label' ).html( ( 1 === seconds ) ? options.secondLabel : options.secondLabelPlural );
-        
-                            months  = (months < 10) ? '0' + months : months;
-                            days    = (days < 10) ? '0' + days : days;
-                            hours   = (hours < 10) ? '0' + hours : hours;
-                            minutes = (minutes < 10) ? '0' + minutes : minutes;
-                            seconds = (seconds < 10) ? '0' + seconds : seconds;
-        
-                            $monthsHolder.find( '.designer-digit' ).html( months );
-                            $daysHolder.find( '.designer-digit' ).html( days );
-                            $hoursHolder.find( '.designer-digit' ).html( hours );
-                            $minutesHolder.find( '.designer-digit' ).html( minutes );
-                            $secondsHolder.find( '.designer-digit' ).html( seconds );
-        
-                            // If the count down is finished, write some text
-                            if ( distance < 0 ) {
-                                clearInterval( x );
-                                $monthsHolder.find( '.designer-label' ).html( options.monthLabelPlural );
-                                $daysHolder.find( '.designer-label' ).html( options.dayLabelPlural );
-                                $hoursHolder.find( '.designer-label' ).html( options.hourLabelPlural );
-                                $minutesHolder.find( '.designer-label' ).html( options.minuteLabelPlural );
-                                $secondsHolder.find( '.designer-label' ).html( options.secondLabelPlural );
-        
-                                $monthsHolder.find( '.designer-digit' ).html( '00' );
-                                $daysHolder.find( '.designer-digit' ).html( '00' );
-                                $hoursHolder.find( '.designer-digit' ).html( '00' );
-                                $minutesHolder.find( '.designer-digit' ).html( '00' );
-                                $secondsHolder.find( '.designer-digit' ).html( '00' );
+						   // Get today's date and time
+						   var now = new Date().getTime();
 
-                                // Actions
-                                expiredActions();
-                            }
-                        },
-                        1000
-                    );
+						   // Find the distance between now and the count down date
+						   var distance = countDownDate - now;
+
+						   // Time calculations for months, days, hours, minutes and seconds
+						   var months  = Math.floor( distance / (1000 * 60 * 60 * 24 * 30) );
+						   var days    = Math.floor( (distance % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24) );
+						   var hours   = Math.floor( (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60) );
+						   var minutes = Math.floor( (distance % (1000 * 60 * 60)) / (1000 * 60) );
+						   var seconds = Math.floor( (distance % (1000 * 60)) / 1000 );
+
+						   // Handle hiding months only (convert months to days)
+						   if ( 'hide-months' === options.hide ) {
+							   days = Math.floor( distance / (1000 * 60 * 60 * 24) );
+							   months = 0;
+						   }
+
+						   // Handle hiding both months and days (convert both to hours)
+						   if ( 'hide-months-days' === options.hide ) {
+							   var totalHours = (months * 30 * 24) + (days * 24) + hours;
+							   months = 0;
+							   days = 0;
+							   hours = totalHours;
+						   }
+
+						   var $monthsHolder  = $countdownElement.find( '.digit-months' );
+						   var $daysHolder    = $countdownElement.find( '.digit-days' );
+						   var $hoursHolder   = $countdownElement.find( '.digit-hours' );
+						   var $minutesHolder = $countdownElement.find( '.digit-minutes' );
+						   var $secondsHolder = $countdownElement.find( '.digit-seconds' );
+
+						   // Update labels
+						   $monthsHolder.find( '.designer-label' ).html( ( 1 === months ) ? options.monthLabel : options.monthLabelPlural );
+						   $daysHolder.find( '.designer-label' ).html( ( 1 === days ) ? options.dayLabel : options.dayLabelPlural );
+						   $hoursHolder.find( '.designer-label' ).html( ( 1 === hours ) ? options.hourLabel : options.hourLabelPlural );
+						   $minutesHolder.find( '.designer-label' ).html( ( 1 === minutes ) ? options.minuteLabel : options.minuteLabelPlural );
+						   $secondsHolder.find( '.designer-label' ).html( ( 1 === seconds ) ? options.secondLabel : options.secondLabelPlural );
+
+						   // Format numbers with leading zeros
+						   months  = (months < 10) ? '0' + months : months;
+						   days    = (days < 10) ? '0' + days : days;
+						   hours   = (hours < 10) ? '0' + hours : hours;
+						   minutes = (minutes < 10) ? '0' + minutes : minutes;
+						   seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+						   // Update digits in DOM
+						   $monthsHolder.find( '.designer-digit' ).html( months );
+						   $daysHolder.find( '.designer-digit' ).html( days );
+						   $hoursHolder.find( '.designer-digit' ).html( hours );
+						   $minutesHolder.find( '.designer-digit' ).html( minutes );
+						   $secondsHolder.find( '.designer-digit' ).html( seconds );
+
+						   // If the count down is finished, write some text
+						   if ( distance < 0 ) {
+							   clearInterval( x );
+							   $monthsHolder.find( '.designer-label' ).html( options.monthLabelPlural );
+							   $daysHolder.find( '.designer-label' ).html( options.dayLabelPlural );
+							   $hoursHolder.find( '.designer-label' ).html( options.hourLabelPlural );
+							   $minutesHolder.find( '.designer-label' ).html( options.minuteLabelPlural );
+							   $secondsHolder.find( '.designer-label' ).html( options.secondLabelPlural );
+
+							   $monthsHolder.find( '.designer-digit' ).html( '00' );
+							   $daysHolder.find( '.designer-digit' ).html( '00' );
+							   $hoursHolder.find( '.designer-digit' ).html( '00' );
+							   $minutesHolder.find( '.designer-digit' ).html( '00' );
+							   $secondsHolder.find( '.designer-digit' ).html( '00' );
+
+							   // Actions on expired countdown
+							   expiredActions();
+						   }
+
+						   // Expired actions function inside scope
+						   function expiredActions(){
+							   var countDownWrap = $countdownElement.closest('.block--countdown-wrapper');
+							   var dataExpiredActions = countDownWrap.data('actions');
+
+							   if (!editorCheck()) {
+								   if(dataExpiredActions.hasOwnProperty('hide-timer')){
+									   countDownWrap.hide();
+								   }
+
+								   if(dataExpiredActions.hasOwnProperty('hide-element')){
+									   $( dataExpiredActions['hide-element'] ).hide();
+								   }
+
+								   if ( dataExpiredActions.hasOwnProperty( 'message' ) ) {
+									   if ( ! countDownWrap.next( '.designer-countdown-message' ).length ) {
+										   countDownWrap.after( '<div class="designer-countdown-message">'+ dataExpiredActions['message'] +'</div>' );
+									   }
+								   }
+
+								   if ( dataExpiredActions.hasOwnProperty( 'redirect' ) ) {
+									   window.location.href = dataExpiredActions['redirect'];
+								   }
+
+								   if ( dataExpiredActions.hasOwnProperty( 'load-template' ) ) {
+									   countDownWrap.next('.elementor').show();
+								   }
+							   }
+						   }
+					   },
+					   1000
+				   );
 
                     function expiredActions(){
                         var countDownWrap = $scope.children('.elementor-widget-container').children('.block--countdown-wrapper');

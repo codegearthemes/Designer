@@ -88,13 +88,13 @@ class Countdown extends Widget_Base{
 				'type' => \Elementor\Controls_Manager::SELECT,
 				'default' => 'show-all',
 				'options' => [
-					'show-all'      => esc_html__( 'Show All', 'designer' ),
-					'hide-months'      => esc_html__( 'Hide Months', 'designer' ),
-                    'hide-seconds'  => esc_html__('Hide Seconds', 'designer'),
-					'hide-minutes-seconds'  => esc_html__('Hide Minutes and Seconds', 'designer'),
-					
+					'show-all'             => esc_html__( 'Show All', 'designer' ),
+					'hide-months'          => esc_html__( 'Hide Months', 'designer' ),
+					'hide-days'            => esc_html__( 'Hide Days', 'designer' ),
+					'hide-seconds'         => esc_html__( 'Hide Seconds', 'designer' ),
+					'hide-minutes-seconds' => esc_html__( 'Hide Minutes and Seconds', 'designer' ),
+					'hide-months-days'     => esc_html__( 'Hide Months and Days', 'designer' ),
 				],
-                
 			]
 		);
 
@@ -972,44 +972,55 @@ class Countdown extends Widget_Base{
 
    
 
-    protected function render() {
+   protected function render() {
 
-        $settings = $this->get_settings_for_display();?>
+    $settings = $this->get_settings_for_display();
+    $format = $settings['countdown_format'];
 
-        <div class="block--countdown-wrapper" <?php echo $this->get_countdown_attributes( $settings ); ?>>
-			<div class="designer-countdown">
-				<?php if($settings['countdown_format'] !== 'hide-months'):?>
-					<div class="digit-wrapper digit-months">
-						<?php echo $this->render_countdown_items($settings, 'Months')?>
-					</div>
-					<?php echo $this->render_separator($settings);?>
-				<?php endif;?>
-				<div class="digit-wrapper digit-days">
-					<?php echo $this->render_countdown_items($settings, 'Days')?>
-				</div>
-				<?php echo $this->render_separator($settings);?>
-				<div class="digit-wrapper digit-hours">
-					<?php echo $this->render_countdown_items($settings, 'Hours')?>
-				</div>
-				<?php if( $settings['countdown_format'] !== 'hide-minutes-seconds'):?>
-					<?php echo $this->render_separator($settings);?>
-					<div class="digit-wrapper digit-minutes">
-						<?php echo $this->render_countdown_items($settings, 'Minutes')?>
-					</div>
-					<?php if( $settings['countdown_format'] !== 'hide-seconds'):?>
-						<?php echo $this->render_separator($settings);?>
-						<div class="digit-wrapper digit-seconds">
-							<?php echo $this->render_countdown_items($settings, 'Seconds')?>
-						</div>
-					<?php endif;?>
-				<?php endif;?>
-			</div>
+    ?>
+
+    <div class="block--countdown-wrapper" <?php echo $this->get_countdown_attributes($settings); ?>>
+        <div class="designer-countdown">
+
+            <?php if ( $format !== 'hide-months' && $format !== 'hide-months-days' ): ?>
+                <div class="digit-wrapper digit-months">
+                    <?php echo $this->render_countdown_items($settings, 'Months') ?>
+                </div>
+                <?php echo $this->render_separator($settings); ?>
+            <?php endif; ?>
+
+            <?php if ( $format !== 'hide-days' && $format !== 'hide-months-days' ): ?>
+                <div class="digit-wrapper digit-days">
+                    <?php echo $this->render_countdown_items($settings, 'Days') ?>
+                </div>
+                <?php echo $this->render_separator($settings); ?>
+            <?php endif; ?>
+
+            <div class="digit-wrapper digit-hours">
+                <?php echo $this->render_countdown_items($settings, 'Hours') ?>
+            </div>
+
+            <?php if ( $format !== 'hide-minutes-seconds' ): ?>
+                <?php echo $this->render_separator($settings); ?>
+                <div class="digit-wrapper digit-minutes">
+                    <?php echo $this->render_countdown_items($settings, 'Minutes') ?>
+                </div>
+
+                <?php if ( $format !== 'hide-seconds' ): ?>
+                    <?php echo $this->render_separator($settings); ?>
+                    <div class="digit-wrapper digit-seconds">
+                        <?php echo $this->render_countdown_items($settings, 'Seconds') ?>
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
 
         </div>
+    </div>
+
     <?php
-		// Load Template
-		$this->load_elementor_template( $settings );
-    }
+    // Load Template
+    $this->load_elementor_template($settings);
+}
 
    
 }
