@@ -207,7 +207,7 @@ class Countdown extends Widget_Base{
         $this->add_control(
 			'month_label_plural',
 			[
-				'label' => esc_html__( 'Month label Plural', 'designer' ),
+				'label' => esc_html__( 'Month label', 'designer' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => esc_html__( 'Months', 'designer' ),
 			]
@@ -216,7 +216,7 @@ class Countdown extends Widget_Base{
         $this->add_control(
 			'day_label_plural',
 			[
-				'label' => esc_html__( 'Month label Plural', 'designer' ),
+				'label' => esc_html__( 'Day label', 'designer' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => esc_html__( 'Days', 'designer' ),
 			]
@@ -225,7 +225,7 @@ class Countdown extends Widget_Base{
         $this->add_control(
 			'hour_label_plural',
 			[
-				'label' => esc_html__( 'Month label Plural', 'designer' ),
+				'label' => esc_html__( 'Hour label', 'designer' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => esc_html__( 'Hours', 'designer' ),
 			]
@@ -234,7 +234,7 @@ class Countdown extends Widget_Base{
         $this->add_control(
 			'minute_label_plural',
 			[
-				'label' => esc_html__( 'Month label Plural', 'designer' ),
+				'label' => esc_html__( 'Minute label', 'designer' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => esc_html__( 'Minutes', 'designer' ),
 			]
@@ -243,7 +243,7 @@ class Countdown extends Widget_Base{
         $this->add_control(
 			'second_label_plural',
 			[
-				'label' => esc_html__( 'Month label Plural', 'designer' ),
+				'label' => esc_html__( 'Second label', 'designer' ),
 				'type' => Controls_Manager::TEXT,
 				'default' => esc_html__( 'Seconds', 'designer' ),
 			]
